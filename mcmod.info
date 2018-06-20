@@ -1,0 +1,10 @@
+[{
+    "modid": "econ",
+    "name": "Econ",
+    "version": "1.0",
+    "description": "An simple economy plugin.",
+    "authorList": [
+        "Dylan Bulmer"
+    ],
+    "dependencies": []
+}]

@@ -1,0 +1,22 @@
+plugins {
+    id 'org.spongepowered.plugin' version '0.8.1'
+}
+
+group = 'com.piggahbrostudios' // TODO
+version = '1.0-SNAPSHOT'
+description = 'A complete economy plugin for sponge'
+
+dependencies {
+    compile 'org.spongepowered:spongeapi:7.0.0'
+}
+
+sponge {
+    plugin {
+        id = 'econ'
+        meta {
+            name = 'Econ'
+            version = '1.0.0'
+            description = 'A complete economy plugin for sponge'
+        }
+    }
+}

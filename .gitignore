@@ -1,0 +1,14 @@
+build
+out
+.gradle
+.idea
+*.iml
+*.jar
+.settings
+bin
+.classpath
+.project
+!gradle-wrapper.jar
+MANIFEST.MF
+
+.DS_STORE
