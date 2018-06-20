@@ -1,12 +1,17 @@
-# Econ
-## A complete economy plugin
+# Econ | A complete economy system
 
-### Commands
+### Commands:
 
-**Economy Balance:**
+`/bal` or `/balance` Reports to you, your balance
+`/(bal | balance) other <player>` Reports the balance of another player
+
+### Permissions:
+
 * econ.command.bal
 * econ.command.bal.other
 
-### Ideas:
+### Future Features:
 
+* Pay other players
 * Allow creation of businesses
+* Sign shops

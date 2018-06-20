@@ -11,7 +11,6 @@ import org.spongepowered.api.text.Text;
 
 import com.google.inject.Inject;
 import com.piggahbrostudios.commands.Balance;
-import com.piggahbrostudios.commands.EconExecutor;
 
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -73,24 +72,16 @@ public class Econ {
     	
     	db = new Database(this, configuration.getParent(), logger);
         
-    	// Building Commands
-    	CommandSpec econCmd = CommandSpec.builder()
-    			.description(Text.of("Basic command for figuring out stuff"))
-    			.arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))))
-    			.executor(new EconExecutor())
-    			.build();
-    	game.getCommandManager().register(this, econCmd, "econ", "text");
-        
     	// Balance Commands
     	CommandSpec balOtherCmd = CommandSpec.builder()
-    			.description(Text.of("Basic command for figuring out stuff"))
+    			.description(Text.of("Checks the balance of another player."))
     			.permission("econ.command.bal.other")
     			.arguments(GenericArguments.player(Text.of("player")))
     			.executor(new Balance(db ))
     			.build();
     	
     	CommandSpec balCmd = CommandSpec.builder()
-    			.description(Text.of("Basic command for figuring out stuff"))
+    			.description(Text.of("Checks your balance."))
     			.permission("econ.command.bal")
     			.arguments(GenericArguments.none())
     			.executor(new Balance(db))
