@@ -71,7 +71,7 @@ public class Econ {
     		logger.error(e.getMessage());
     	}
     	
-    	db = new Database(configuration.getParent(), logger);
+    	db = new Database(this, configuration.getParent(), logger);
         
     	// Building Commands
     	CommandSpec econCmd = CommandSpec.builder()

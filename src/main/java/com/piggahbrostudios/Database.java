@@ -14,15 +14,20 @@ import javax.sql.DataSource;
 
 public class Database {
 	private SqlService sql;
-	private String path;
 	private Logger logger;
+	private Object plugin;
+    String uri;
 	
-	public Database(String path, Logger logger) {
-		this.path = path;
+	public Database(Object plugin, String path, Logger logger) {
 		this.logger = logger;
+		this.plugin = plugin;
+		
+		this.uri = "jdbc:h2:" + path + "\\econ\\econ.db";
+		
+		verifyDatabase();
 	}
 	
-	public DataSource getDataSource(String jdbcUrl) throws SQLException {
+	public DataSource getDataSource(Object plugin, String jdbcUrl) throws SQLException {
 	    if (sql == null) {
 	        sql = Sponge.getServiceManager().provide(SqlService.class).get();
 	    }
@@ -31,20 +36,50 @@ public class Database {
 	
 	// Later on
 	public double getBalance(Player player) throws SQLException {
-	    String uri = "jdbc:h2:" + path + "\\econ\\econ.db";
-	    String sql = "SELECT * FROM balance WHERE id = " + player.getIdentifier();
-	
-	    try (Connection conn = getDataSource(uri).getConnection();
+	    String sql = "SELECT * FROM balance WHERE id = `" + player.getIdentifier() + "`";
+	    double balance;
+	    
+	    try (Connection conn = getDataSource(plugin, uri).getConnection();
 	         PreparedStatement stmt = conn.prepareStatement(sql);
 	         ResultSet results = stmt.executeQuery()) {
 	
 	    	results.next();
-	    	return results.getDouble(2);
+	    	balance = results.getDouble(2);
 	
 	    } catch (SQLException e) {
-	    	logger.error(e.getMessage());
-			return -1;
+		    sql = "INSERT INTO `balance` (id, amount) VALUES ('" + player.getIdentifier() + "', 100 )";
+		    
+		    try (Connection conn = getDataSource(plugin, uri).getConnection();
+		         PreparedStatement stmt = conn.prepareStatement(sql);) {
+			    	
+		    	stmt.executeUpdate();
+		    	stmt.close();
+		    	
+		    	balance = 100;
+		
+		    } catch (SQLException e1) {
+		    	logger.error(e1.getMessage());
+		    	balance = -1;
+		    }
 	    }
+	    
+	    return balance;
 	
+	}
+	
+	private void verifyDatabase() {
+	    String sql = "CREATE TABLE IF NOT EXISTS `balance` (`id` varchar(50) NOT NULL, `amount` double(15) NOT NULL);";
+	    
+	    try (Connection conn = getDataSource(plugin, uri).getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql);) {
+	    	
+	    	int rowsAltered = stmt.executeUpdate();
+	    	stmt.close();
+	    	
+	    	logger.info("Database: " + rowsAltered + " rows altered.");
+	    	
+	    } catch (SQLException e) {
+	    	logger.error(e.getMessage());
+	    }
 	}
 }
